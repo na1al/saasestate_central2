@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+
+  db:
+    build:
+      context: ./db
+    container_name: saasestate_central_db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: central
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432

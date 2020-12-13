@@ -1,0 +1,13 @@
+{
+  "name": "First data json",
+  "links": [
+    {
+      "name": "file1",
+      "url": "/Users/imac/projects/estate/central/app/data.json"
+    },
+    {
+      "name": "file2",
+      "url": "/Users/imac/projects/estate/central/app/data.json"
+    }
+  ]
+}
