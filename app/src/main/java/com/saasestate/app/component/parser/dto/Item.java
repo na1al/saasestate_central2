@@ -1,9 +1,9 @@
-package com.saasestate.app.parser.dto;
+package com.saasestate.app.component.parser.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.saasestate.app.entity.Currency;
-import com.saasestate.app.validation.EnumValidator;
+import com.saasestate.app.core.validation.EnumValidator;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -34,4 +34,17 @@ public class Item {
     @EnumValidator(enumClazz = Currency.CurrencyType.class, message = "Currency type is invalid")
     @NotNull
     public String currency;
+
+    @NotNull
+    public Location location;
+
+    @Data
+    private static class Location{
+
+        @NotNull
+        private Double lat;
+
+        @NotNull
+        private Double lng;
+    }
 }

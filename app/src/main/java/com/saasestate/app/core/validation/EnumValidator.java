@@ -1,4 +1,4 @@
-package com.saasestate.app.validation;
+package com.saasestate.app.core.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

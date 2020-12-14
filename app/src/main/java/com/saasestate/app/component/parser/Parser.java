@@ -1,10 +1,9 @@
-package com.saasestate.app.parser;
+package com.saasestate.app.component.parser;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.saasestate.app.parser.dto.Index;
+import com.saasestate.app.component.parser.dto.Index;
 import com.saasestate.app.entity.Source;
 import lombok.extern.log4j.Log4j2;
 

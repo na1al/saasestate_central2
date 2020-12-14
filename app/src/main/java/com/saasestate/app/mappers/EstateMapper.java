@@ -1,10 +1,9 @@
-package com.saasestate.app.parser.mappers;
+package com.saasestate.app.mappers;
 
 import com.saasestate.app.entity.Currency;
 import com.saasestate.app.entity.Estate;
-import com.saasestate.app.parser.dto.Item;
+import com.saasestate.app.component.parser.dto.Item;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public abstract class EstateMapper {

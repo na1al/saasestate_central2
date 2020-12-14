@@ -1,6 +1,6 @@
-package com.saasestate.app.parser.dto;
+package com.saasestate.app.component.parser.dto;
 
-import com.saasestate.app.parser.ItemsCollection;
+import com.saasestate.app.component.parser.ItemsCollection;
 import lombok.Data;
 
 import java.util.List;

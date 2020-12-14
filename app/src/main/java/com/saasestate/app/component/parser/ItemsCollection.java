@@ -1,21 +1,18 @@
-package com.saasestate.app.parser;
+package com.saasestate.app.component.parser;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.saasestate.app.parser.dto.Item;
-import lombok.Data;
+import com.saasestate.app.component.parser.dto.Item;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
 
-public class ItemsCollection  implements Iterator<Item> {
+public class ItemsCollection  implements Iterable<Item> {
 
     @Setter
     private String name;
@@ -34,26 +31,8 @@ public class ItemsCollection  implements Iterator<Item> {
 
     @SneakyThrows
     @Override
-    public boolean hasNext() {
+    public Iterator<Item> iterator() {
 
-        if (jsonParser == null) {
-            jsonParser = createParser();
-        }
-
-        return jsonParser.nextToken() != JsonToken.END_ARRAY;
-    }
-
-    @SneakyThrows
-    @Override
-    public Item next() {
-        return mapper.readValue(jsonParser, Item.class);
-    }
-
-    /**
-     * @return
-     * @throws IOException
-     */
-    private JsonParser createParser() throws IOException {
         File data = new File(url);
 
         if (!data.isFile()) {
@@ -66,6 +45,18 @@ public class ItemsCollection  implements Iterator<Item> {
             throw new IllegalStateException("Expected content to be an array");
         }
 
-        return jsonParser;
+        return new Iterator<Item>() {
+            @SneakyThrows
+            @Override
+            public boolean hasNext() {
+                return jsonParser.nextToken() != JsonToken.END_ARRAY;
+            }
+
+            @SneakyThrows
+            @Override
+            public Item next() {
+                return mapper.readValue(jsonParser, Item.class);
+            }
+        };
     }
 }

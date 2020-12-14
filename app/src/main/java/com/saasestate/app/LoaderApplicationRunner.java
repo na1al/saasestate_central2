@@ -1,15 +1,15 @@
-package com.saasestate.app.parser;
+package com.saasestate.app;
 
+import com.saasestate.app.component.geo.GeoApi;
+import com.saasestate.app.component.parser.Parser;
 import com.saasestate.app.entity.Estate;
 import com.saasestate.app.entity.Source;
-import com.saasestate.app.parser.Parser;
-import com.saasestate.app.parser.dto.Item;
-import com.saasestate.app.parser.mappers.EstateMapper;
+import com.saasestate.app.component.parser.dto.Item;
+import com.saasestate.app.mappers.EstateMapper;
 import com.saasestate.app.repository.EstateRepository;
 import com.saasestate.app.service.SourceService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
@@ -25,13 +25,21 @@ public class LoaderApplicationRunner implements ApplicationRunner {
 
     public static final int BATCH_SIZE = 1000;
 
+    private GeoApi geoApi;
     private SourceService sourceService;
     private EstateRepository estateRepository;
     private EstateMapper mapper;
     private Validator validator;
 
     @Autowired
-    public LoaderApplicationRunner(SourceService sourceService, EstateRepository estateRepository, EstateMapper mapper, Validator validator) {
+    public LoaderApplicationRunner(
+            GeoApi geoApi,
+            SourceService sourceService,
+            EstateRepository estateRepository,
+            EstateMapper mapper,
+            Validator validator
+    ) {
+        this.geoApi = geoApi;
         this.sourceService = sourceService;
         this.estateRepository = estateRepository;
         this.mapper = mapper;
@@ -48,8 +56,7 @@ public class LoaderApplicationRunner implements ApplicationRunner {
         var index = parser.getIndex();
 
         for (var link : index.getLinks()) {
-            while (link.hasNext()) {
-                Item item = link.next();
+            for (var item : link) {
                 var errors = validator.validate(item);
 
                 if (!errors.isEmpty()) {
