@@ -1,17 +1,24 @@
 package com.saasestate.app.entity;
 
+import com.saasestate.app.component.parser.dto.Item;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Getter;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity
 @Table(indexes = {@Index(columnList="userId, objectId", name = "idx_uoid", unique = true)})
+@TypeDef(
+        name = "jsonb",
+        typeClass = JsonBinaryType.class
+)
 public class Estate extends BaseEntity {
 
     @Id
@@ -37,6 +44,22 @@ public class Estate extends BaseEntity {
     @Getter
     @ManyToOne(optional = false)
     public Currency currency;
+
+    @JsonIgnore
+    @Getter
+    @OneToMany(mappedBy = "estate", cascade = CascadeType.ALL)
+    private final List<EstateHistory> histories = new ArrayList<>();
+
+    @Basic
+    private int dataHash;
+
+    @Column
+    private Integer oldDataHash;
+
+    @JsonIgnore
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    public Item data;
 
 //    @Setter
 //    @Getter

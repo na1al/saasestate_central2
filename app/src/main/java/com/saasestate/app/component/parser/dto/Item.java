@@ -2,17 +2,20 @@ package com.saasestate.app.component.parser.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saasestate.app.entity.Currency;
 import com.saasestate.app.core.validation.EnumValidator;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Item {
+public class Item implements Serializable {
 
     @NotNull
     @Min(1)
@@ -39,12 +42,17 @@ public class Item {
     public Location location;
 
     @Data
-    private static class Location{
+    public static class Location{
 
         @NotNull
-        private Double lat;
+        public Double lat;
 
         @NotNull
-        private Double lng;
+        public Double lng;
+    }
+
+    @SneakyThrows
+    public String toString(){
+        return (new ObjectMapper()).writeValueAsString(this);
     }
 }

@@ -6,16 +6,16 @@ import lombok.Data;
 @Data
 public class Address {
 
-    @JsonProperty("Id")
+    @JsonProperty
     private long id;
 
-    @JsonProperty("Name")
+    @JsonProperty
     private String name;
 
-    @JsonProperty("Lat")
+    @JsonProperty
     private Double lat;
 
-    @JsonProperty("Lng")
+    @JsonProperty
     private Double lng;
 
 }
