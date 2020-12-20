@@ -1,7 +1,9 @@
 package com.saasestate.app;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.saasestate.app.component.parser.Parser;
 import com.saasestate.app.entity.Estate;
+import com.saasestate.app.entity.EstateData;
 import com.saasestate.app.entity.Source;
 import com.saasestate.app.component.parser.dto.Item;
 import com.saasestate.app.mappers.EstateMapper;
@@ -20,7 +22,7 @@ import java.util.List;
 
 @Service
 @Log4j2
-public class LoaderApplicationRunner implements ApplicationRunner  {
+public class LoaderApplicationRunner implements ApplicationRunner {
 
     public static final int BATCH_SIZE = 1000;
 
@@ -45,41 +47,47 @@ public class LoaderApplicationRunner implements ApplicationRunner  {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-            Source source = sourceService.getNextSource();
-            Parser parser = new Parser(source);
-            List<Estate> estates = new ArrayList<>();
+        Source source = sourceService.getNextSource();
+        Parser parser = new Parser(source);
+        List<EstateData> data = new ArrayList<>();
 
-            var index = parser.getIndex();
+        var index = parser.getIndex();
 
-            for (var link : index.getLinks()) {
-                for (var item : link) {
-                    var errors = validator.validate(item);
+        for (var link : index.getLinks()) {
+            for (var item : link) {
+                var errors = validator.validate(item);
 
-                    if (!errors.isEmpty()) {
-                        for (ConstraintViolation<Item> violation : errors) {
-                            log.warn(String.format("ID %s: %s %s", item.objectId, violation.getPropertyPath(), violation.getMessage()));
-                        }
-                    } else {
-                        estates.add(mapper.toEntity(item));
-                        this.flush(estates, false);
+                if (!errors.isEmpty()) {
+                    for (ConstraintViolation<Item> violation : errors) {
+                        log.warn(String.format("ID %s: %s %s", item.objectId, violation.getPropertyPath(), violation.getMessage()));
                     }
+                } else {
+                    data.add(mapper.toEntityData(item));
+                    this.flush(data, false);
                 }
-                this.flush(estates, true);
             }
+            this.flush(data, true);
+        }
 
-            Estate estate = estateService.getNextToUpdate().orElse(null);
-
-            estateService.updateMetaData(estate);
+        updateEntitiesMeta();
 
     }
 
+    public void updateEntitiesMeta() throws JsonProcessingException {
+        EstateData data = null;
+        while ((data = estateService.getNextToUpdate()) != null) {
+            estateService.upsert(data);
+        }
+    }
+
     /**
-     * @param estates
+     *
+     * @param data
      * @param force
      */
-    private void flush(List<Estate> estates, Boolean force) {
-        if (force || estates.size() >= BATCH_SIZE) {
-            estateService.batchInsert(estates);
+    private void flush(List<EstateData> data, Boolean force) {
+        if (force || data.size() >= BATCH_SIZE) {
+            estateService.batchDataInsert(data);
         }
     }
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class Address {
+public class AddressComponents {
 
     @JsonProperty
     private long id;
@@ -13,12 +13,5 @@ public class Address {
     private String name;
 
     @JsonProperty
-    private Double lat;
-
-    @JsonProperty
-    private Double lng;
-
-    @JsonProperty
-    private AddressComponents[] components;
-
+    private String[] types;
 }

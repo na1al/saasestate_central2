@@ -1,5 +1,6 @@
 package com.saasestate.app.entity;
 
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,11 +10,14 @@ import java.util.Date;
 
 @MappedSuperclass
 public class BaseEntity {
-    @CreationTimestamp
-    @Column(columnDefinition = "timestamp default now() not null")
-    private Date createdAt;
 
+    @Getter
+    @CreationTimestamp
+    @Column(columnDefinition = "timestamp default now() not null", updatable = false)
+    protected Date createdAt;
+
+    @Getter
     @UpdateTimestamp
     @Column(columnDefinition = "timestamp default now() not null")
-    private Date updatedAt;
+    protected Date updatedAt;
 }

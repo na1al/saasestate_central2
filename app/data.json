@@ -1,18 +1,18 @@
 [
   {
     "user_id": 1,
-    "object_id": 1,
-    "price": 101,
+    "object_id": 2,
+    "price": 70,
     "currency": "USD",
     "location": {
-      "lat": 50.458797,
-      "lng": 30.500414
+      "lat": 50.4299057338262,
+      "lng": 30.473281445907922
     }
   },
   {
     "user_id": 1,
-    "object_id": 2,
-    "price": 70,
+    "object_id": 1,
+    "price": 101,
     "currency": "USD",
     "location": {
       "lat": 50.458797,
