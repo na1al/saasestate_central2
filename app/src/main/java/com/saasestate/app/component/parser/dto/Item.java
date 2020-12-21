@@ -30,13 +30,7 @@ public class Item implements Serializable {
     public int objectId;
 
     @NotNull
-    @Min(0)
-    @Max(2147483647)
-    public Integer price;
-
-    @EnumValidator(enumClazz = Currency.CurrencyType.class, message = "Currency type is invalid")
-    @NotNull
-    public String currency;
+    public Price price;
 
     @NotNull
     public Location location;
@@ -49,6 +43,19 @@ public class Item implements Serializable {
 
         @NotNull
         public Double lng;
+    }
+
+    @Data
+    public static class Price{
+
+        @NotNull
+        @Min(0)
+        @Max(2147483647)
+        public Integer amount;
+
+        @EnumValidator(enumClazz = Currency.CurrencyType.class, message = "Currency type is invalid")
+        @NotNull
+        public String currency;
     }
 
     @SneakyThrows
