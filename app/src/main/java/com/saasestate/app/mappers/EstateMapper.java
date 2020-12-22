@@ -16,6 +16,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public abstract class EstateMapper {
 
+    @Mapping(target = "prices", source = "price")
     public abstract Estate toEntity(Item item) throws JsonProcessingException;
 
     @Mapping(target = "data", expression = "java(item)")
